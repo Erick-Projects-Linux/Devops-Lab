@@ -30,8 +30,17 @@ elif [ "$1" = "cpu" ]; then
     echo "[$(date)] $(lscpu | grep 'Model name')" | tee -a "$LOG_FILE"
 
 elif [ "$1" = "memory" ]; then
-    echo "===== MEMORY =====" | tee -a "$LOG_FILE"
+    echo "[$(date)] ===== MEMORY =====" | tee -a "$LOG_FILE"
     free -h | tee -a "$LOG_FILE"
+
+    MEM_USAGE=$(free | awk '/Mem:/ {printf("%.0f"), $3/$2 * 100}')
+    echo "[$(date)] Memory usage is ${MEM_USAGE}%" | tee -a "$LOG_FILE"
+
+    if [ "$MEM_USAGE" -ge 80 ]; then
+        echo "[$(date)] WARNING: Memory usage is above 80%" | tee -a "$LOG_FILE"
+    else
+        echo "[$(date)] Memory usage is OK" | tee -a "$LOG_FILE"
+    fi
 
 elif [ "$1" = "disk" ]; then
     echo "[$(date)] ===== DISK =====" | tee -a "$LOG_FILE"
@@ -45,6 +54,13 @@ elif [ "$1" = "disk" ]; then
     else
         echo "[$(date)] Disk usage is OK" | tee -a "$LOG_FILE"
     fi
+elif [ "$1" = "monitor" ]; then
+    echo "Starting monitoring... Press CTRL+C to stop"
+
+    while true; do
+        ./system-info.sh all
+        sleep 5
+    done
 
 else
     echo "Usage:"
