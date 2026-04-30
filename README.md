@@ -31,3 +31,7 @@ It supports these commands:
 ./system-info.sh cpu
 ./system-info.sh memory
 ./system-info.sh disk
+
+## Progress Update
+
+Returned to the DevOps project and confirmed the GitHub repo is still active.
