@@ -15,7 +15,9 @@ The project begins with Linux and Bash scripting and will evolve into a complete
 * Azure
 * Kubernetes
 
-The goal is to understand each component deeply enough to explain it in a technical interview and demonstrate practical DevOps skills through a working project.
+The goal is to build practical experience with modern DevOps tools and workflows by developing a monitoring platform from the ground up.
+
+Each stage of the project focuses on understanding not only how the technology works, but also the problem it solves in a real-world environment.
 
 ---
 
