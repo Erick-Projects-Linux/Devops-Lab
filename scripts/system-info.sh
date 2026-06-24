@@ -3,6 +3,25 @@
 LOG_FILE="system.log"
 USER_NAME=$(whoami)
 TODAY=$(date)
+MEM_USAGE=$(free | awk '/Mem:/ {printf("%.0f"), $3/$2 * 100}')
+DISK_USAGE=$(df /workspaces | awk 'NR==2 {print $5}' | tr -d '%')
+CPU_DATA=$(top -bn1 | grep "%Cpu")
+CPU_USAGE=$(echo "$CPU_DATA" | awk '{print int(100 - $8)}')
+MEM_THRESHOLD=80
+DISK_THRESHOLD=80
+CPU_THRESHOLD=80
+
+check_threshold() {
+    local usage=$1
+    local threshold=$2
+    local metric=$3
+
+    if [ "$usage" -ge "$threshold" ]; then
+        echo "[$(date)] WARNING: ${metric} usage is above ${threshold}%" | tee -a "$LOG_FILE"
+    else
+        echo "[$(date)] ${metric} usage is OK" | tee -a "$LOG_FILE"
+    fi
+}
 
 if [ -z "$1" ]; then
     set -- all
@@ -15,7 +34,9 @@ if [ "$1" = "all" ]; then
 
     echo "" | tee -a "$LOG_FILE"
     echo "===== CPU =====" | tee -a "$LOG_FILE"
-    lscpu | grep "Model name" | tee -a "$LOG_FILE"
+    echo "$CPU_DATA" | tee -a "$LOG_FILE"
+    echo "CPU usage is ${CPU_USAGE}%" | tee -a "$LOG_FILE"
+    check_threshold "$CPU_USAGE" "$CPU_THRESHOLD" "CPU"
 
     echo "" | tee -a "$LOG_FILE"
     echo "===== MEMORY =====" | tee -a "$LOG_FILE"
@@ -27,33 +48,26 @@ if [ "$1" = "all" ]; then
 
 elif [ "$1" = "cpu" ]; then
     echo "[$(date)] ===== CPU =====" | tee -a "$LOG_FILE"
-    echo "[$(date)] $(lscpu | grep 'Model name')" | tee -a "$LOG_FILE"
+    echo "$CPU_DATA" | tee -a "$LOG_FILE"
+    echo "[$(date)] CPU usage is ${CPU_USAGE}%" | tee -a "$LOG_FILE"
+
+    check_threshold "$CPU_USAGE" "$CPU_THRESHOLD" "CPU"
 
 elif [ "$1" = "memory" ]; then
     echo "[$(date)] ===== MEMORY =====" | tee -a "$LOG_FILE"
     free -h | tee -a "$LOG_FILE"
 
-    MEM_USAGE=$(free | awk '/Mem:/ {printf("%.0f"), $3/$2 * 100}')
     echo "[$(date)] Memory usage is ${MEM_USAGE}%" | tee -a "$LOG_FILE"
 
-    if [ "$MEM_USAGE" -ge 80 ]; then
-        echo "[$(date)] WARNING: Memory usage is above 80%" | tee -a "$LOG_FILE"
-    else
-        echo "[$(date)] Memory usage is OK" | tee -a "$LOG_FILE"
-    fi
+    check_threshold "$MEM_USAGE" "$MEM_THRESHOLD" "Memory"
 
 elif [ "$1" = "disk" ]; then
     echo "[$(date)] ===== DISK =====" | tee -a "$LOG_FILE"
-    df -h | grep "^/dev" | tee -a "$LOG_FILE"
+    df -h /workspaces | tee -a "$LOG_FILE"
 
-    DISK_USAGE=$(df / | awk 'NR==2 {print $5}' | tr -d '%')
     echo "[$(date)] Disk usage is ${DISK_USAGE}%" | tee -a "$LOG_FILE"
 
-    if [ "$DISK_USAGE" -ge 80 ]; then
-        echo "[$(date)] WARNING: Disk usage is above 80%" | tee -a "$LOG_FILE"
-    else
-        echo "[$(date)] Disk usage is OK" | tee -a "$LOG_FILE"
-    fi
+    check_threshold "$DISK_USAGE" "$DISK_THRESHOLD" "Disk"
 elif [ "$1" = "monitor" ]; then
     echo "Starting monitoring... Press CTRL+C to stop"
 
