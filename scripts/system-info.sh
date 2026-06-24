@@ -2,7 +2,6 @@
 
 LOG_FILE="system.log"
 USER_NAME=$(whoami)
-TODAY=$(date)
 MEM_USAGE=$(free | awk '/Mem:/ {printf("%.0f"), $3/$2 * 100}')
 DISK_USAGE=$(df /workspaces | awk 'NR==2 {print $5}' | tr -d '%')
 CPU_DATA=$(top -bn1 | grep "%Cpu")
@@ -23,48 +22,51 @@ check_threshold() {
     fi
 }
 
+blank_line() {
+    echo | tee -a "$LOG_FILE"
+}
+
 if [ -z "$1" ]; then
     set -- all
 fi
 
 if [ "$1" = "all" ]; then
-    echo "User: $USER_NAME" | tee -a "$LOG_FILE"
-    echo "Date: $TODAY" | tee -a "$LOG_FILE"
-    echo "===== SYSTEM INFO =====" | tee -a "$LOG_FILE"
+    echo "[$(date)] User: $USER_NAME" | tee -a "$LOG_FILE"
+    echo "[$(date)] ===== SYSTEM INFO =====" | tee -a "$LOG_FILE"
 
-    echo "" | tee -a "$LOG_FILE"
+    blank_line
     echo "===== CPU =====" | tee -a "$LOG_FILE"
     echo "$CPU_DATA" | tee -a "$LOG_FILE"
-    echo "CPU usage is ${CPU_USAGE}%" | tee -a "$LOG_FILE"
+    echo "[$(date)] CPU usage is ${CPU_USAGE}%" | tee -a "$LOG_FILE"
     check_threshold "$CPU_USAGE" "$CPU_THRESHOLD" "CPU"
 
-    echo "" | tee -a "$LOG_FILE"
+    blank_line
     echo "===== MEMORY =====" | tee -a "$LOG_FILE"
     free -h | tee -a "$LOG_FILE"
+    echo "[$(date)] Memory usage is ${MEM_USAGE}%" | tee -a "$LOG_FILE"
+    check_threshold "$MEM_USAGE" "$MEM_THRESHOLD" "Memory"
 
-    echo "" | tee -a "$LOG_FILE"
+    blank_line
     echo "===== DISK =====" | tee -a "$LOG_FILE"
-    df -h | grep "^/dev" | tee -a "$LOG_FILE"
+    df -h /workspaces | tee -a "$LOG_FILE"
+    echo "[$(date)] Disk usage is ${DISK_USAGE}%" | tee -a "$LOG_FILE"
+    check_threshold "$DISK_USAGE" "$DISK_THRESHOLD" "Disk"
 
 elif [ "$1" = "cpu" ]; then
     echo "[$(date)] ===== CPU =====" | tee -a "$LOG_FILE"
     echo "$CPU_DATA" | tee -a "$LOG_FILE"
     echo "[$(date)] CPU usage is ${CPU_USAGE}%" | tee -a "$LOG_FILE"
-
     check_threshold "$CPU_USAGE" "$CPU_THRESHOLD" "CPU"
 
 elif [ "$1" = "memory" ]; then
     echo "[$(date)] ===== MEMORY =====" | tee -a "$LOG_FILE"
     free -h | tee -a "$LOG_FILE"
-
     echo "[$(date)] Memory usage is ${MEM_USAGE}%" | tee -a "$LOG_FILE"
-
     check_threshold "$MEM_USAGE" "$MEM_THRESHOLD" "Memory"
 
 elif [ "$1" = "disk" ]; then
     echo "[$(date)] ===== DISK =====" | tee -a "$LOG_FILE"
     df -h /workspaces | tee -a "$LOG_FILE"
-
     echo "[$(date)] Disk usage is ${DISK_USAGE}%" | tee -a "$LOG_FILE"
 
     check_threshold "$DISK_USAGE" "$DISK_THRESHOLD" "Disk"
