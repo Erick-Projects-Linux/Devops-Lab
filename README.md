@@ -23,25 +23,34 @@ Each stage of the project focuses on understanding not only how the technology w
 
 ## Current Features
 
-### Linux Monitoring Script
+### Linux Monitoring Toolkit
 
-The current version collects and displays:
+The current version of the project includes a Bash-based monitoring script that collects, calculates, and reports system resource usage.
 
-* CPU information
-* Memory usage
-* Disk usage
-* Current user
-* Current directory
-* Date and time
+Current capabilities include:
 
-The script also includes:
+* CPU utilization monitoring
+* Memory utilization monitoring
+* Disk utilization monitoring
+* Configurable warning thresholds
+* Timestamped logging to `system.log`
+* Continuous monitoring mode
+* Current user detection
+* Reusable Bash functions to reduce duplicated code
+
+The project demonstrates practical Linux administration and Bash scripting concepts including:
 
 * Variables
 * Command substitution
+* Functions
+* Conditional statements
+* Loops
 * Pipes
-* Conditional logic
-* Threshold checks
+* `grep`
+* `awk`
+* `tr`
 * Logging
+* Threshold-based monitoring
 
 ---
 
@@ -50,8 +59,8 @@ The script also includes:
 ```text
 Devops-Lab/
 ├── scripts/
-│   ├── hello.sh
-│   └── system-info.sh
+│   ├── system-info.sh
+|   └── system.log
 ├── logs/
 ├── README.md
 ```
