@@ -60,8 +60,7 @@ The project demonstrates practical Linux administration and Bash scripting conce
 Devops-Lab/
 ├── scripts/
 │   ├── system-info.sh
-|   └── system.log
-├── logs/
+│   └── system.log
 ├── README.md
 ```
 
@@ -71,15 +70,22 @@ Devops-Lab/
 
 * Linux Command Line
 * Bash Scripting
+* Git & GitHub
 * Variables
 * Command Substitution
-* Pipes
-* grep
-* awk
+* Functions
 * Conditional Statements
+* Loops
+* Pipes
+* `grep`
+* `awk`
+* `tr`
+* CPU Monitoring
 * Memory Monitoring
 * Disk Monitoring
+* Threshold-Based Monitoring
 * Logging
+
 
 ---
 
