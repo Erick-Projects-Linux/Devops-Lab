@@ -20,6 +20,7 @@ def get_cpu_usage():
 
     check_threshold(cpu_usage, 80, "CPU")
 
+
 def get_mem_usage():
     mem_data = subprocess.getoutput("free")
     parts = mem_data.split()
@@ -32,7 +33,8 @@ def get_mem_usage():
     print(mem_data)
     print(f"Memory usage is {mem_usage}%")
 
-    check_threshold(mem_usage, 80, "Memory")    
+    check_threshold(mem_usage, 80, "Memory")
+
 
 def get_disk_usage():
     disk_data = subprocess.getoutput("df /workspaces")
@@ -44,6 +46,7 @@ def get_disk_usage():
     print(f"Disk usage is {disk_usage}%")
 
     check_threshold(disk_usage, 80, "Disk")
+
 
 get_cpu_usage()
 get_mem_usage()
