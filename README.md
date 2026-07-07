@@ -1,4 +1,5 @@
 # DevOps Monitoring Platform
+This project documents my journey from Linux and Bash fundamentals to building a production-style DevOps monitoring platform using Python, Flask, Docker, CI/CD, Azure, and Kubernetes.
 
 ## Project Goal
 
@@ -54,6 +55,24 @@ The project demonstrates practical Linux administration and Bash scripting conce
 
 ---
 
+### Python Monitoring Toolkit
+
+As the next stage of the project, the monitoring logic has been reimplemented in Python to create reusable functions that will later power a Flask web application.
+
+Current capabilities include:
+
+* CPU utilization monitoring
+* Memory utilization monitoring
+* Disk utilization monitoring
+* Configurable warning thresholds
+* Linux command execution using `subprocess`
+* Parsing Linux command output
+* Resource usage calculations
+* Modular Python functions
+* Functions returning monitoring values for future Flask integration
+
+---
+
 ## Current Project Structure
 
 ```text
@@ -61,6 +80,8 @@ Devops-Lab/
 ├── scripts/
 │   ├── system-info.sh
 │   └── system.log
+├── python/
+│   └── monitor.py
 ├── README.md
 ```
 
@@ -85,7 +106,11 @@ Devops-Lab/
 * Disk Monitoring
 * Threshold-Based Monitoring
 * Logging
-
+* Python
+* `subprocess`
+* Parsing Command Output
+* Python Functions
+* Return Values
 
 ---
 
@@ -134,3 +159,5 @@ Linux Monitoring Script
 Erick Rodriguez
 
 Building practical DevOps skills through hands-on projects and real-world deployment workflows.
+
+My goal isn't to build the biggest project possible—it's to understand every technology I use well enough to explain and maintain it.
