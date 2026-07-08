@@ -26,7 +26,7 @@ Each stage of the project focuses on understanding not only how the technology w
 
 ### Linux Monitoring Toolkit
 
-The current version of the project includes a Bash-based monitoring script that collects, calculates, and reports system resource usage.
+The current version of the project includes a Bash based monitoring script that collects, calculates, and reports system resource usage.
 
 Current capabilities include:
 
@@ -160,4 +160,4 @@ Erick Rodriguez
 
 Building practical DevOps skills through hands-on projects and real-world deployment workflows.
 
-My goal isn't to build the biggest project possible—it's to understand every technology I use well enough to explain and maintain it.
+My goal isn't to build the biggest project possible it's to understand every technology I use well enough to explain and maintain it.
